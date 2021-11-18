@@ -1,7 +1,18 @@
 import Head from 'next/head'
 import styles from './styles.module.scss'
 
-export const PostsTemplate = () => {
+type Post = {
+  title: string
+  excerpt: string
+  slug: string
+  updatedAt: string
+}
+
+type PostsProps = {
+  posts: Post[]
+}
+
+export const PostsTemplate = ({ posts }: PostsProps) => {
   return (
     <>
       <Head>
@@ -9,17 +20,13 @@ export const PostsTemplate = () => {
       </Head>
       <main className={styles.container}>
         <div className={styles.posts}>
-          <a href="#">
-            <time>12 de março de 2021</time>
-            <strong>Lorem ipsum dolor sit amet.</strong>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Voluptatum obcaecati impedit nemo eligendi totam minima ut
-              mollitia culpa harum, non exercitationem explicabo iusto voluptas?
-              Modi esse voluptatibus debitis nobis facere magnam deserunt
-              recusandae iste, mollitia, aperiam minus error iusto non!
-            </p>
-          </a>
+          {posts.map(post => (
+            <a key={post.slug} href="#">
+              <time>{post.updatedAt}</time>
+              <strong>{post.title}</strong>
+              <p>{post.excerpt}</p>
+            </a>
+          ))}
         </div>
       </main>
     </>
