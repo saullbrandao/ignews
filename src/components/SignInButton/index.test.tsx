@@ -20,8 +20,8 @@ describe('SignInButton component', () => {
           user: {
             name: 'John Doe',
             email: 'john.doe@example.com',
-            expires: 'fake-expires',
           },
+          expires: 'fake-expires',
         },
         false,
       ]
