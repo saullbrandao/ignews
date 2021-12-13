@@ -21,7 +21,7 @@ export const HomeTemplate = ({ product }: HomeProps) => {
             Get access to all the publications <br />
             <span>for {product.amount} a month</span>
           </p>
-          <SubscribeButton priceId={product.priceId} />
+          <SubscribeButton />
         </section>
         <img src="/images/avatar.svg" alt="Girl coding" />
       </main>
