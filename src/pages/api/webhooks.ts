@@ -1,18 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Readable } from 'stream'
+import { buffer } from 'micro'
 import Stripe from 'stripe'
 import { stripe } from '../../services/stripe'
 import { saveSubscription } from './_lib/manageSubscription'
-
-async function buffer(readable: Readable) {
-  const chunks = []
-
-  for await (const chunk of readable) {
-    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
-  }
-
-  return Buffer.concat(chunks)
-}
 
 export const config = {
   api: {
@@ -29,14 +19,14 @@ const relevantEvents = new Set([
 const Webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     const buf = await buffer(req)
-    const secret = req.headers['stripe-signature']
+    const signature = req.headers['stripe-signature'] as string
 
     let event: Stripe.Event
 
     try {
       event = stripe.webhooks.constructEvent(
-        buf,
-        secret,
+        buf.toString(),
+        signature,
         process.env.STRIPE_WEBHOOK_SECRET,
       )
     } catch (err) {
