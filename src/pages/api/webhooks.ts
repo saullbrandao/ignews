@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { buffer } from 'micro'
+import getRawBody from 'raw-body'
 import Stripe from 'stripe'
 import { stripe } from '../../services/stripe'
 import { saveSubscription } from './_lib/manageSubscription'
@@ -18,19 +18,19 @@ const relevantEvents = new Set([
 
 const Webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    const body = (await buffer(req)).toString()
-    const secret = req.headers['stripe-signature']
+    const rawBody = await getRawBody(req)
+    const signature = req.headers['stripe-signature']
 
     let event: Stripe.Event
 
     try {
       event = stripe.webhooks.constructEvent(
-        body,
-        secret,
+        rawBody.toString(),
+        signature,
         process.env.STRIPE_WEBHOOK_SECRET,
       )
     } catch (err) {
-      return res.status(400).send(`Webhook Error: ${err.message}`)
+      return res.status(400).json(`Webhook Error: ${err.message}`)
     }
     const { type } = event
 
