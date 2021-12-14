@@ -1,6 +1,9 @@
-import { query as q } from 'faunadb'
-import { fauna } from '../../../services/fauna'
+import { Client, query as q } from 'faunadb'
 import { stripe } from '../../../services/stripe'
+
+const fauna = new Client({
+  secret: process.env.FAUNADB_KEY,
+})
 
 export const saveSubscription = async (
   subscriptionId: string,
