@@ -25,7 +25,7 @@ const Webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       event = stripe.webhooks.constructEvent(
-        rawBody.toString(),
+        rawBody,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET,
       )
