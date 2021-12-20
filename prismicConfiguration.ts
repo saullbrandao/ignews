@@ -1,5 +1,5 @@
 // -- Prismic Repo Name
-export const repoName = 'saull-ignews'
+export const repoName = process.env.PRISMIC_REPOSITORY_NAME
 
 // -- Prismic API endpoint
 // Determines which repository to query and fetch data from
